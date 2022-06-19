@@ -1,0 +1,6 @@
+framework module Pods_fenril {
+  umbrella header "Pods-fenril-umbrella.h"
+
+  export *
+  module * { export * }
+}
