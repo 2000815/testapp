@@ -6,6 +6,7 @@ target 'fenril' do
   use_frameworks!
 
   # Pods for fenril
+  pod 'Alamofire', '~> 5.2'  //これを追加
 
  
 end

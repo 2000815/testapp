@@ -3,23 +3,29 @@ import CoreLocation
 
 
 struct Qiita : Codable{
-    let result : Result
+    let results : Result
 }
 struct Result : Codable{
-    let apivar : String
-    let available: Int
-    let returned : String
-    let start : Int
-    let Shop: Shop
+    let apiversion : String
+    let resultsavailable: Int
+    let resultsreturned : String
+    let resultsstart: Int
+    let shop: [Shop]
+    
+    
+    enum CodingKeys: String, CodingKey {
+        case apiversion = "api_version"
+        case resultsavailable = "results_available"
+        case resultsreturned = "results_returned"
+        case resultsstart = "results_start"
+    }
 }
 
-struct Shop : Codable{
-    let one : Dec
-}
-struct Dec : Codable{
-    let access :String
-}
+struct Shop: Codable {
+    let name : String
 
+}
+    
 
 class ViewController: UIViewController, CLLocationManagerDelegate,UITableViewDataSource,UITableViewDelegate {
 
@@ -84,6 +90,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate,UITableViewDat
                     //ここからAPIになります
                 
                 let newurl = "https://webservice.recruit.co.jp/hotpepper/gourmet/v1/?key=2df1a79aa99e96fb&lat=" + newLatitude + "&lng=" +  newLongitude + "&range=2&order=1&format=json"
+                print(newurl)
                 
                 self.getData(from:newurl)
             }
@@ -100,26 +107,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate,UITableViewDat
     private func getData(from newurl:String){
         print(newurl)
         let task = URLSession.shared.dataTask(with: URL(string: newurl)!, completionHandler: {data, response, error in
-            guard let data = data, error == nil else{
-                print("エラーが入りました")
+        
+            
+            
+            guard let jsonData = data else {
                 return
             }
-            //APIのデータがUTF8で見れる
-            let articles = String(data: data, encoding: .utf8)!
-            print(articles)
-
-            do{
-                
-                let couponData = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
-                print("これはデータ型:",couponData)
-                // パースする
+            do {
+                let person = try JSONDecoder().decode(Qiita.self, from: jsonData)
                 
                 
-//                let items = try JSONSerialization.jsonObject(with: data) as! Dictionary<String, Any>
-                //print(s.result)
-                //print(items)
-            }catch{
-                print("取得ができません",error)
+               
+                print(person)
+                
+            } catch {
+                print("error:", error.localizedDescription)
             }
             
 //            guard let json = result else{
