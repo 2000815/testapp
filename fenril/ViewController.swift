@@ -2,30 +2,195 @@ import UIKit
 import CoreLocation
 
 
-struct Qiita : Codable{
-    let results : Result
+// This file was generated from JSON Schema using quicktype, do not modify it directly.
+// To parse the JSON, add this file to your project and do:
+//
+//   let temperatures = try? newJSONDecoder().decode(Temperatures.self, from: jsonData)
+
+// This file was generated from JSON Schema using quicktype, do not modify it directly.
+// To parse the JSON, add this file to your project and do:
+//
+//   let temperatures = try? newJSONDecoder().decode(Temperatures.self, from: jsonData)
+
+import Foundation
+
+// MARK: - Temperatures
+struct Temperatures: Codable {
+    let results: Results
 }
-struct Result : Codable{
-    let apiversion : String
-    let resultsavailable: Int
-    let resultsreturned : String
-    let resultsstart: Int
+
+// MARK: - Results
+struct Results: Codable {
+    let apiVersion: String
+    let resultsAvailable: Int
+    let resultsReturned: String
+    let resultsStart: Int
     let shop: [Shop]
-    
-    
+
     enum CodingKeys: String, CodingKey {
-        case apiversion = "api_version"
-        case resultsavailable = "results_available"
-        case resultsreturned = "results_returned"
-        case resultsstart = "results_start"
+        case apiVersion = "api_version"
+        case resultsAvailable = "results_available"
+        case resultsReturned = "results_returned"
+        case resultsStart = "results_start"
+        case shop
     }
 }
 
+// MARK: - Shop
 struct Shop: Codable {
-    let name : String
+    let access, address, band, barrierFree: String
+    let budget: Budget
+    let budgetMemo: String
+    let capacity: Int
+    let card, shopCatch, charter, child: String
+    let close: String
+    let couponUrls: CouponUrls
+    let course, english, freeDrink, freeFood: String
+    let genre: Genre
+    let horigotatsu, id, karaoke: String
+    let ktaiCoupon: Int
+    let largeArea, largeServiceArea: Area
+    let lat, lng: Double
+    let logoImage: String
+    let lunch: String
+    let middleArea: Area
+    let midnight, mobileAccess, name, nameKana: String
+    let nonSmoking, shopOpen, otherMemo, parking: String
+    let partyCapacity: PartyCapacity
+    let pet: String
+    let photo: Photo
+    let privateRoom: String
+    let serviceArea: Area
+    let shopDetailMemo, show: String
+    let smallArea: Area
+    let stationName: Name
+    let tatami, tv: String
+    let urls: Urls
+    let wedding, wifi: String
 
+    enum CodingKeys: String, CodingKey {
+        case access, address, band
+        case barrierFree = "barrier_free"
+        case budget
+        case budgetMemo = "budget_memo"
+        case capacity, card
+        case shopCatch = "catch"
+        case charter, child, close
+        case couponUrls = "coupon_urls"
+        case course, english
+        case freeDrink = "free_drink"
+        case freeFood = "free_food"
+        case genre, horigotatsu, id, karaoke
+        case ktaiCoupon = "ktai_coupon"
+        case largeArea = "large_area"
+        case largeServiceArea = "large_service_area"
+        case lat, lng
+        case logoImage = "logo_image"
+        case lunch
+        case middleArea = "middle_area"
+        case midnight
+        case mobileAccess = "mobile_access"
+        case name
+        case nameKana = "name_kana"
+        case nonSmoking = "non_smoking"
+        case shopOpen = "open"
+        case otherMemo = "other_memo"
+        case parking
+        case partyCapacity = "party_capacity"
+        case pet, photo
+        case privateRoom = "private_room"
+        case serviceArea = "service_area"
+        case shopDetailMemo = "shop_detail_memo"
+        case show
+        case smallArea = "small_area"
+        case stationName = "station_name"
+        case tatami, tv, urls, wedding, wifi
+    }
 }
-    
+
+// MARK: - Budget
+struct Budget: Codable {
+    let average, code, name: String
+}
+
+// MARK: - CouponUrls
+struct CouponUrls: Codable {
+    let pc, sp: String
+}
+
+// MARK: - Genre
+struct Genre: Codable {
+    let genreCatch, code, name: String
+
+    enum CodingKeys: String, CodingKey {
+        case genreCatch = "catch"
+        case code, name
+    }
+}
+
+// MARK: - Area
+struct Area: Codable {
+    let code: String
+    let name: Name
+}
+
+enum Name: String, Codable {
+    case 東京 = "東京"
+    case 東大和 = "東大和"
+    case 玉川上水 = "玉川上水"
+    case 関東 = "関東"
+    case 青梅昭島小作青梅線沿線 = "青梅・昭島・小作・青梅線沿線"
+}
+
+enum PartyCapacity: Codable {
+    case integer(Int)
+    case string(String)
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let x = try? container.decode(Int.self) {
+            self = .integer(x)
+            return
+        }
+        if let x = try? container.decode(String.self) {
+            self = .string(x)
+            return
+        }
+        throw DecodingError.typeMismatch(PartyCapacity.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for PartyCapacity"))
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .integer(let x):
+            try container.encode(x)
+        case .string(let x):
+            try container.encode(x)
+        }
+    }
+}
+
+// MARK: - Photo
+struct Photo: Codable {
+    let mobile: Mobile
+    let pc: PC
+}
+
+// MARK: - Mobile
+struct Mobile: Codable {
+    let l, s: String
+}
+
+// MARK: - PC
+struct PC: Codable {
+    let l, m, s: String
+}
+
+// MARK: - Urls
+struct Urls: Codable {
+    let pc: String
+}
+
 
 class ViewController: UIViewController, CLLocationManagerDelegate,UITableViewDataSource,UITableViewDelegate {
 
@@ -106,19 +271,24 @@ class ViewController: UIViewController, CLLocationManagerDelegate,UITableViewDat
     
     private func getData(from newurl:String){
         print(newurl)
-        let task = URLSession.shared.dataTask(with: URL(string: newurl)!, completionHandler: {data, response, error in
+        let url: URL = URL(string: newurl)!
+        let request = URLRequest(url: url)
+        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
         
+            print(data)
             
             
-            guard let jsonData = data else {
-                return
+            if let  error = error {
+                print("era-")
             }
             do {
-                let person = try JSONDecoder().decode(Qiita.self, from: jsonData)
+//                var personalData = String(data: data!, encoding: .utf8)!
+//                print(personalData)
+                let person = try JSONDecoder().decode(Temperatures.self, from: data!)
                 
                 
                
-                print(person)
+                print(person.results)
                 
             } catch {
                 print("error:", error.localizedDescription)
@@ -127,7 +297,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate,UITableViewDat
 //            guard let json = result else{
 //                return
 //            }
-        })
+        }
         task.resume()
     }
                 
